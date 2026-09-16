@@ -20,9 +20,26 @@ const JobPage = () => {
     };
     fetchJob();
   }, [id]);
+
+
+
   const deleteJob = async () => {
-    console.log(JobPage);
+    
+    try{
+
+          const response = await fetch(`/api/jobs/${id}`, {
+          method: 'DELETE',
+        });
+        if (response.ok) {
+          navigate('/');
+        }
+    } catch(error){
+      console.error('Failed to delete the job');
+    }
   };
+
+
+
 
   if (!job) {
     return <div>Loading...</div>;
