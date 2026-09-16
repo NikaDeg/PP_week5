@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 
 const EditJobPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState("");
-  const [type, setType] = useState("");
-  const [description, setDescription] = useState("");
-  const [companyName, setCompanyName] = useState("");
-  const [contactEmail, setContactEmail] = useState("");
-  const [contactPhone, setContactPhone] = useState("");
-  const [location, setLocation] = useState("");
-  const [salary, setSalary] = useState("");
+  const [title, setTitle] = useState('');
+  const [type, setType] = useState('');
+  const [description, setDescription] = useState('');
+  const [companyName, setCompanyName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactPhone, setContactPhone] = useState('');
+  const [location, setLocation] = useState('');
+  const [salary, setSalary] = useState('');
 
   useEffect(() => {
     const fetchJob = async () => {
       try {
         const res = await fetch(`/api/jobs/${id}`, {
-          method: "GET",
+          method: 'GET',
           headers: {
-            "Content-Type": "application/json",
+            'Content-Type': 'application/json',
           },
         });
         if (!res.ok) {
-          throw new Error("Failed to fetch job");
+          throw new Error('Failed to fetch job');
         }
         const data = await res.json();
         setTitle(data.title);
@@ -36,19 +36,43 @@ const EditJobPage = () => {
         setLocation(data.location);
         setSalary(data.salary);
       } catch (error) {
-        console.log("Error fetching data", error);
+        console.log('Error fetching data', error);
       }
     };
     fetchJob();
   }, [id]);
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
-    console.log("EditJobPage");
+    try {
+      const res = await fetch(`/api/jobs/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          id,
+          title,
+          type,
+          description,
+          company: {
+            name: companyName,
+            contactEmail,
+            contactPhone,
+          },
+          location: location,
+          salary: salary,
+        }),
+      });
+      if (res) {
+        console.log('success');
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
   };
-
   const cancelEdit = () => {
-    console.log("cancelEdit");
+    navigate('/');
   };
 
   return (
@@ -69,30 +93,20 @@ const EditJobPage = () => {
         </select>
 
         <label>Job Description:</label>
-        <textarea
-          value={description}
-          onChange={(e) => setDescription(e.target.value)}
-        ></textarea>
+        <textarea value={description} onChange={(e) => setDescription(e.target.value)}></textarea>
         <label>Company Name:</label>
-        <input
-          value={companyName}
-          onChange={(e) => setCompanyName(e.target.value)}
-        />
+        <input value={companyName} onChange={(e) => setCompanyName(e.target.value)} />
         <label>Contact Email:</label>
-        <input
-          value={contactEmail}
-          onChange={(e) => setContactEmail(e.target.value)}
-        />
+        <input value={contactEmail} onChange={(e) => setContactEmail(e.target.value)} />
         <label>Contact Phone:</label>
-        <input
-          value={contactPhone}
-          onChange={(e) => setContactPhone(e.target.value)}
-        />
+        <input value={contactPhone} onChange={(e) => setContactPhone(e.target.value)} />
         <label>Location:</label>
         <input value={location} onChange={(e) => setLocation(e.target.value)} />
         <label>Salary:</label>
         <input value={salary} onChange={(e) => setSalary(e.target.value)} />
-        <button type="submit">Update Job</button>
+        <button type="submit" onClick={submitForm}>
+          Update Job
+        </button>
         <button type="button" onClick={cancelEdit}>
           Cancel
         </button>
@@ -102,4 +116,3 @@ const EditJobPage = () => {
 };
 
 export default EditJobPage;
-
