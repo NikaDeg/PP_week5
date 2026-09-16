@@ -1,4 +1,5 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
+
 const JobListing = ({ id, title, type, description, company }) => {
   return (
     <div className="job-preview">
@@ -7,6 +8,7 @@ const JobListing = ({ id, title, type, description, company }) => {
       <p>Description: {description}</p>
       <p>Company: {company.name}</p>
       <Link to={`/jobs/${id}`}>
+        {/* <h2>{job.title}</h2> */}
         <button>View Job</button>
       </Link>
     </div>
@@ -14,4 +16,3 @@ const JobListing = ({ id, title, type, description, company }) => {
 };
 
 export default JobListing;
-

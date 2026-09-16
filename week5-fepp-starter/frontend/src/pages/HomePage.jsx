@@ -10,6 +10,7 @@ const Home = () => {
     };
     fetchJobs();
   }, []);
+
   const [jobs, setJobs] = useState([]);
 
   return (

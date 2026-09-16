@@ -1,11 +1,25 @@
-import { useEffect, useState } from "react";
-import { useParams, Link, useNavigate } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useParams, Link, useNavigate } from 'react-router-dom';
+import JobListing from '../components/JobListing';
 
 const JobPage = () => {
   const { id } = useParams();
   const [job, setJob] = useState(null);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const fetchJob = async () => {
+      try {
+        const res = await fetch(`/api/jobs/${id}`);
+        if (!res.ok) throw new Error('Network response was not ok');
+        const data = await res.json();
+        setJob(data);
+      } catch (err) {
+        setError(err.message);
+      }
+    };
+    fetchJob();
+  }, [id]);
   const deleteJob = async () => {
     console.log(JobPage);
   };
@@ -29,9 +43,9 @@ const JobPage = () => {
         <button>Edit Job</button>
       </Link>
       <button onClick={deleteJob}>Delete Job</button>
+      <button onClick={() => navigate('/')}>Back</button>
     </div>
   );
 };
 
 export default JobPage;
-
