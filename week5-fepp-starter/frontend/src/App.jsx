@@ -9,6 +9,8 @@ import JobPage from "./pages/JobPage";
 import EditJobPage from "./pages/EditJobPage";
 import Signup from "./pages/Signup";
 import Login from "./pages/Login";
+import JobsBySalary from "./pages/JobsBySalary";
+
 
 
 const App = () => {
@@ -25,6 +27,7 @@ const App = () => {
               <Route path="/edit-job/:id" element={<EditJobPage />} />
               <Route path="/signup" element={<Signup />} />
               <Route path="/login" element={<Login />} />
+              <Route path="/by-salary" element={<JobsBySalary />} />
               <Route path="*" element={<NotFoundPage />} />
             </Routes>
           </div>
