@@ -6,17 +6,72 @@ const AddJobPage = () => {
   const [type, setType] = useState("Full-Time");
   const [location, setLocation] = useState("");
   const [description, setDescription] = useState("");
-  const [salary, setSalary] = useState(4500);
+  const [salary, setSalary] = useState(0);
   const [companyName, setCompanyName] = useState("");
   const [contactEmail, setContactEmail] = useState("");
   const [contactPhone, setContactPhone] = useState("");
 
   const navigate = useNavigate();
 
-  const submitForm = (e) => {
+  const submitForm = async (e) => {
     e.preventDefault();
-    console.log("AddJobPage");
+   //console.log("AddJobPage");
+    //const value = e.target;
+    //console.log(value);
+
+    const newJob = { title, type, location, description, salary, company : { name: companyName, contactEmail, contactPhone } };
+    //console.log(newJob);
+
+   
+    try {
+       const response = await fetch("/api/jobs", {
+          method: "POST",
+          body: JSON.stringify(newJob),
+          headers: {
+            "Content-Type": "application/json",
+          },
+    })
+      const json = await response.json();
+
+      navigate("/");
+
+     } catch (error) {
+      console.log(json.error);
+     }
+
+   
+    // const response = await fetch("/api/jobs", {
+    //   method: "POST",
+    //   body: JSON.stringify(newJob),
+    //   headers: {
+    //     "Content-Type": "application/json",
+    //   },
+    // })
+    // const json = await response.json();
+
+
+    // if (response.ok) {
+    //   // setTitle("");
+    //   // setType("Full-Time"); //Full-time?
+    //   // setLocation("");
+    //   // setDescription("");
+    //   // setSalary();
+    //   // setCompanyName("");
+    //   // setContactEmail("");
+    //   // setContactPhone("");
+    //   navigate("/");
+    //   //console.log("New job added successfully", json);
+
+    // }
+    // if (!response.ok) {
+    //   console.log(json.error);
+    // }
+
   };
+
+
+
+  
 
   return (
     <div className="create">
@@ -79,9 +134,10 @@ const AddJobPage = () => {
         <label htmlFor="salary">Salary:</label>
         <input
           id="salary"
-          type="text"
+          type="number"
+          min="0"
           value={salary}
-          onChange={(e) => setSalary(e.target.value)}
+          onChange={(e) => setSalary(Number(e.target.value))}
         />
         <button type="submit">Add Job</button>
       </form>
